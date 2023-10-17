@@ -10,6 +10,7 @@ public class Client {
             Scanner scanner = new Scanner(System.in);
 
             boolean authenticated = false;
+            String sessionToken;
 
             while (!authenticated) {
                 System.out.print("Enter username: ");
@@ -24,10 +25,14 @@ public class Client {
                     System.out.println("Authentication successful.");
                     applicationService.start(); // Start the print server
 
+                    // Get the session token for the user
+                    sessionToken = applicationService.getSessionToken(username);
+                    System.out.println(sessionToken);
+
                     // Example print operation
                     String filename = "document.pdf";
                     String printer = "printer1";
-                    applicationService.print(filename, printer);
+                    applicationService.print(sessionToken, filename, printer);
 
                     // Example listing the print queue for a printer
                     String printerQueue = applicationService.queue(printer);
@@ -35,7 +40,7 @@ public class Client {
 
                     // Example moving a job to the top of the queue
                     int jobNumber = 1; // Job number to move to the top
-                    applicationService.topQueue(printer, jobNumber);
+                    applicationService.topQueue(sessionToken, printer, jobNumber);
 
                     // Example reading a configuration parameter
                     String parameter = "printer_paper_size";
@@ -46,7 +51,6 @@ public class Client {
                 } else {
                     System.out.println("Authentication failed.");
                 }
-
             }
             scanner.close();
         } catch (Exception e) {

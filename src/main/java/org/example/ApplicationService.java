@@ -8,13 +8,13 @@ public interface ApplicationService extends Remote {
     boolean authenticate(String username, String password) throws RemoteException;
 
     // Print a file on the specified printer
-    void print(String filename, String printer) throws RemoteException;
+    void print(String sessionToken, String filename, String printer) throws RemoteException;
 
     // List the print queue for a given printer
     String queue(String printer) throws RemoteException;
 
     // Move a print job to the top of the queue
-    void topQueue(String printer, int job) throws RemoteException;
+    void topQueue(String sessionToken, String printer, int job) throws RemoteException;
 
     // Start the print server
     void start() throws RemoteException;
@@ -33,4 +33,7 @@ public interface ApplicationService extends Remote {
 
     // Set a configuration parameter in the print server
     void setConfig(String parameter, String value) throws RemoteException;
+
+    boolean isSessionValid(String sessionToken) throws RemoteException;
+    String getSessionToken(String username) throws RemoteException;
 }
