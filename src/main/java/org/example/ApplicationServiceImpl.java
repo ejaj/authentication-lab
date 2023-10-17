@@ -17,14 +17,18 @@ public class ApplicationServiceImpl extends UnicastRemoteObject implements Appli
         isServerRunning = false;
 
         // Initialize user passwords (you would load these from a secure source)
-        userPasswords.put("kazi", PasswordHash.hashPassword("123456"));
+        // userPasswords.put("kazi", PasswordHash.hashPassword("123456"));
+        userPasswords = PasswordManager.readPasswordsFromFile(Constants.PASSWORD_FILE_PATH);
     }
 
     @Override
     public boolean authenticate(String username, String password) throws RemoteException {
         // Check if the provided password matches the stored hash
         String storedHash = userPasswords.get(username);
-        return PasswordHash.validatePassword(password, storedHash);
+        if (storedHash != null) {
+            return PasswordManager.validatePassword(password, storedHash);
+        }
+        return false;
     }
 
     @Override

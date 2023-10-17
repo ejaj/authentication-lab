@@ -18,9 +18,6 @@ public class Client {
                 System.out.print("Enter password: ");
                 String password = scanner.nextLine();
 
-                // String username = "user1";
-                // String password = "password1";
-
                 // Authenticate the user
                 if (applicationService.authenticate(username, password)) {
                     authenticated = true;
