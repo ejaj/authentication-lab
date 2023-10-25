@@ -6,6 +6,12 @@ import java.util.Scanner;
 public class Client {
     public static void main(String[] args) {
         try {
+
+            // Enable TLS for RMI on the client side
+            System.setProperty("javax.net.ssl.trustStore", "clientTruststore.jks");
+            System.setProperty("javax.net.ssl.trustStorePassword", "kazi123456");
+
+
             ApplicationService applicationService = (ApplicationService) Naming.lookup("rmi://localhost/ApplicationService");
             Scanner scanner = new Scanner(System.in);
 
