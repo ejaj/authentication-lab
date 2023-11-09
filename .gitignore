@@ -44,3 +44,7 @@ build/
 passwords.txt
 access_log.txt
 error_log.txt
+acl.txt
+user-roles.txt
+permissions.txt
+hierarchy-role.txt
