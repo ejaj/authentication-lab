@@ -19,24 +19,21 @@ public class Client {
 
         Logger successLogger = Logger.getLogger("SuccessLogger");
         Logger errorLogger = Logger.getLogger("ErrorLogger");
-        FileHandler successFileHandler = null;
-        FileHandler errorFileHandler = null;
+
         try {
             // Enable TLS for RMI on the client side
             System.setProperty("javax.net.ssl.trustStore", "clientTruststore.jks");
             System.setProperty("javax.net.ssl.trustStorePassword", "kazi123456");
 
             ApplicationService applicationService = (ApplicationService) Naming.lookup("rmi://localhost/ApplicationService");
-            PrintService printService = (PrintService) Naming.lookup("rmi://localhost/PrintService");
             Scanner scanner = new Scanner(System.in);
 
             boolean authenticated = false;
             String sessionToken;
-            Boolean isSessionValid;
 
             // Create log files and handlers for successful and failed authentication
-            successFileHandler = new FileHandler("access_log.txt", true);
-            errorFileHandler = new FileHandler("error_log.txt", true);
+            FileHandler successFileHandler = new FileHandler("access_log.txt", true);
+            FileHandler errorFileHandler = new FileHandler("error_log.txt", true);
 
             // Set a custom formatter for both loggers
             SimpleFormatter customFormatter = new SimpleFormatter() {
@@ -70,52 +67,34 @@ public class Client {
                     successLogger.info(getColoredMessage("[Client] Enter password: " + password, ANSI_GREEN));
 
                     successLogger.info(getColoredMessage("[Server] Authentication successful", ANSI_GREEN));
-
+                    applicationService.start(); // Start the print server
 
                     // Get the session token for the user
                     sessionToken = applicationService.getSessionToken(username);
-                    isSessionValid = applicationService.isSessionValid(sessionToken);
-                    sessionToken = applicationService.getSessionToken(username);
                     successLogger.info(getColoredMessage("[Server] Session token" + sessionToken, ANSI_GREEN));
-
-                    printService.start();
-                    printService.setCurrentUserName(username);
-                    printService.setSessionValidity(isSessionValid);
 
                     // Example print operation
                     String filename = "document.pdf";
                     String printer = "printer1";
-                    printService.print(filename, printer);
+                    applicationService.print(sessionToken, filename, printer);
+                    successLogger.info(getColoredMessage("[Server] Print job '" + filename + "' added to the queue for printer: " + printer, ANSI_GREEN));
 
                     // Example listing the print queue for a printer
-                    String printerQueue = printService.queue(printer);
-                    System.out.println(printerQueue);
+                    String printerQueue = applicationService.queue(printer);
+                    successLogger.info(getColoredMessage("[Server] Print Queue for " + printer + ":\n" + printerQueue, ANSI_GREEN));
 
                     // Example moving a job to the top of the queue
                     int jobNumber = 1; // Job number to move to the top
-                    printService.topQueue(printer, jobNumber);
-
+                    applicationService.topQueue(sessionToken, printer, jobNumber);
+                    successLogger.info(getColoredMessage("[Client] Moving job #" + jobNumber + " to the top of the queue", ANSI_GREEN));
 
                     // Example reading a configuration parameter
                     String parameter = "printer_paper_size";
-                    String configValue = printService.readConfig(parameter);
-                    System.out.println(configValue);
+                    String configValue = applicationService.readConfig(parameter);
+                    successLogger.info(getColoredMessage("[Server] Configuration value for '" + parameter + "': " + configValue, ANSI_GREEN));
 
-                    // Example set configuration parameter
-                    String size = "4";
-                    printService.setConfig(parameter, size);
-
-
-                    // Example check printer status
-                    printService.status(printer);
-
-                    // Example restart printer status
-                    // printService.restart();
-
-
-                    printService.stop(); // Stop the print server
-                    successLogger.info(getColoredMessage("[Server] Print Server Stop successful", ANSI_GREEN));
-
+                    applicationService.stop(); // Stop the print server
+                    successLogger.info(getColoredMessage("[Server] Authentication successful", ANSI_GREEN));
                 } else {
                     errorLogger.info(getColoredMessage("[Client] Enter username: " + username, ANSI_RED));
                     errorLogger.info(getColoredMessage("[Client] Enter password: " + password, ANSI_RED));
@@ -127,14 +106,6 @@ public class Client {
             scanner.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // Close the FileHandlers
-            if (successFileHandler != null) {
-                successFileHandler.close();
-            }
-            if (errorFileHandler != null) {
-                errorFileHandler.close();
-            }
         }
     }
 
