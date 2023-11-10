@@ -7,6 +7,7 @@ public class ApplicationServer {
     public static void main(String[] args) {
         try {
             ApplicationService applicationService = new ApplicationServiceImpl();
+            PrintRBACService printRBACService = new PrintRBACServiceImpl();
 
             // Create the RMI registry and bind the service
             LocateRegistry.createRegistry(1099); // Default RMI registry port
@@ -19,9 +20,13 @@ public class ApplicationServer {
             System.setProperty("java.rmi.server.hostname", "localhost");
             System.setProperty("java.rmi.server.useCodebaseOnly", "false");
 
+            // Bind ApplicationService
             Naming.rebind("rmi://localhost/ApplicationService", applicationService);
+            System.out.println("ApplicationService server started and bound.");
 
-            System.out.println("Server started and bound as 'ApplicationService'");
+            // Bind PrintService
+            Naming.rebind("rmi://localhost/PrintService", printRBACService);
+            System.out.println("PrintService server started and bound.");
         } catch (Exception e) {
             e.printStackTrace();
         }
