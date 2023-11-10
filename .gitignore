@@ -45,3 +45,6 @@ passwords.txt
 access_log.txt
 error_log.txt
 acl.txt
+hierarchy-role.txt
+permissions.txt
+user-roles.txt

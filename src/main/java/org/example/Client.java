@@ -78,9 +78,10 @@ public class Client {
                     sessionToken = applicationService.getSessionToken(username);
                     successLogger.info(getColoredMessage("[Server] Session token" + sessionToken, ANSI_GREEN));
 
-                    printService.start();
                     printService.setCurrentUserName(username);
                     printService.setSessionValidity(isSessionValid);
+
+                    printService.start();
 
                     // Example print operation
                     String filename = "document.pdf";
