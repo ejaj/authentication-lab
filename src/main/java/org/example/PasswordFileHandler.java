@@ -32,6 +32,10 @@ public class PasswordFileHandler {
         passwords.put("erica", PasswordManager.hashPassword("123456"));
         passwords.put("fred", PasswordManager.hashPassword("123456"));
         passwords.put("george", PasswordManager.hashPassword("123456"));
+        passwords.put("henry", PasswordManager.hashPassword("123456"));
+        passwords.put("ida", PasswordManager.hashPassword("123456"));
+
+
 
         // Write passwords to the file, creating it if it doesn't exist
         writePasswordsToFile(passwords, filePath);

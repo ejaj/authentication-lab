@@ -58,31 +58,33 @@ public class RBACWriter {
     }
 
     private static Map<String, String> getHierarchyRolesStringMap() {
+
         Map<String, String> hierarchy_roles = new HashMap<>();
-        hierarchy_roles.put("Administrator", "ServiceTechnician");
-        hierarchy_roles.put("ServiceTechnician", "PowerUser");
-        hierarchy_roles.put("PowerUser", "OrdinaryUser");
+        hierarchy_roles.put(Constants.ADMINISTRATOR, Constants.SERVICE_TECHNICIAN);
+        hierarchy_roles.put(Constants.SERVICE_TECHNICIAN, Constants.POWER_USER);
+        hierarchy_roles.put(Constants.POWER_USER, Constants.ORDINARY_USER);
         return hierarchy_roles;
     }
 
     private static Map<String, String> getUserRolesStringMap() {
         Map<String, String> user_roles = new HashMap<>();
-        user_roles.put("alice", "Administrator");
-        user_roles.put("bob", "ServiceTechnician");
-        user_roles.put("cecilia", "PowerUser");
-        user_roles.put("david", "OrdinaryUser");
-        user_roles.put("erica", "OrdinaryUser");
-        user_roles.put("fred", "OrdinaryUser");
-        user_roles.put("george", "OrdinaryUser");
+        user_roles.put("alice", Constants.ADMINISTRATOR);
+        user_roles.put("bob", Constants.SERVICE_TECHNICIAN);
+        user_roles.put("cecilia", Constants.POWER_USER);
+        user_roles.put("david", Constants.ORDINARY_USER);
+        user_roles.put("erica", Constants.ORDINARY_USER);
+        user_roles.put("fred", Constants.ORDINARY_USER);
+        user_roles.put("george", Constants.ORDINARY_USER);
         return user_roles;
     }
 
     private static Map<String, String> getPermissionStringMap() {
+
         Map<String, String> permissions = new HashMap<>();
-        permissions.put("Administrator", "print,queue,topQueue,start,stop,restart,status,readConfig,setConfig");
-        permissions.put("ServiceTechnician", "start,stop,restart,status,readConfig,setConfig");
-        permissions.put("PowerUser", "print,queue,topQueue,restart");
-        permissions.put("OrdinaryUser", "print,queue");
+        permissions.put(Constants.ADMINISTRATOR, "print,queue,topQueue,start,stop,restart,status,readConfig,setConfig");
+        permissions.put(Constants.SERVICE_TECHNICIAN, "start,stop,restart,status,readConfig,setConfig");
+        permissions.put(Constants.POWER_USER, "print,queue,topQueue,restart");
+        permissions.put(Constants.ORDINARY_USER, "print,queue");
         return permissions;
     }
 
